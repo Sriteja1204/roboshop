@@ -42,7 +42,7 @@ Each service's datastore was chosen to match its actual data shape and access pa
 ## Repository Structure
 
 ```
-roboshop-documentation/
+roboshop/
 ├── README.md                              ← you are here
 ├── deployment-playbook.md                 ← full ordered, copy-pasteable setup guide
 └── docs/
