@@ -32,9 +32,7 @@ frontend  :
 
 ## BLOCK 1 — MongoDB
 
-```
-[Check out for complete guide:] (docs/02-mongodb.md)
-```
+[`Check out for complete guide:`](docs/02-mongodb.md)
 
 **Verify:** `systemctl status mongod` shows `active (running)`.
 
