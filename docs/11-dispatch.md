@@ -1,45 +1,94 @@
-# 11 — Dispatch
+# Dispatch 
 
-Go microservice that consumes "order paid" messages from RabbitMQ and simulates dispatching the order. This is the consumer side of the queue Payment publishes to.
+Dispatch is the service which dispatches the product after purchase. It is written in GoLang, So wanted to install GoLang.
 
-## Install Go
+Developer has chosen GoLang, Check with developer which version of GoLang is needed.
 
-```shell
+Install GoLang
+
+```shell 
 dnf install golang -y
 ```
 
-## User, code, and build
+Configure the application.
+
+Our application developed by the developer of our org and it is not having any RPM software just like other softwares. So we need to configure every step manually
+
+We already discussed in Linux basics section that applications should run as nonroot user.
+
+Add application User
+
+```shell 
+useradd --system --home /app --shell /sbin/nologin --comment "roboshop system user" roboshop
+```
+
+User **roboshop** is a function / daemon user to run the application. Apart from that we dont use this user to login to server.
+
+Also, username **roboshop** has been picked because it more suits to our project name.
+
+We keep application in one standard location. This is a usual practice that runs in the organization.
+
+Lets setup an app directory.
 
 ```shell
-useradd --system --home /app --shell /sbin/nologin --comment "roboshop system user" roboshop
-mkdir /app
-curl -L -o /tmp/dispatch.zip https://roboshop-artifacts.s3.amazonaws.com/dispatch-v3.zip
-cd /app
+mkdir /app 
+```
+
+Download the application code to created app directory.
+
+```shell
+curl -L -o /tmp/dispatch.zip https://roboshop-artifacts.s3.amazonaws.com/dispatch-v3.zip 
+cd /app 
 unzip /tmp/dispatch.zip
+```
+
+Every application is developed by development team will have some common softwares that they use as libraries. This application also have the same way of defined dependencies in the application configuration.
+
+Lets download the dependencies & build the software.
+
+```shell 
+cd /app 
 go mod init dispatch
-go get
+go get 
 go build
 ```
 
-`go build` compiles to a single static binary with no external runtime dependency — unlike Node (needs `node` at runtime) or Java (needs the JVM), the compiled `dispatch` executable can run directly.
+We need to setup a new service in **systemd** so `systemctl` can manage this service
 
-## systemd service
+We already discussed in linux basics that advantages of systemctl managing services, Hence we are taking that approach. Which is also a standard way in the OS.
 
-`/etc/systemd/system/dispatch.service`:
-```ini
+Setup SystemD Payment Service
+
+```unit file (systemd) title=/etc/systemd/system/dispatch.service
+[Unit]
+Description = Dispatch Service
 [Service]
 User=roboshop
-Environment=AMQP_HOST=<RABBITMQ-IP>
+// highlight-start
+Environment=AMQP_HOST=RABBITMQ-IP
+// highlight-end
 Environment=AMQP_USER=roboshop
 Environment=AMQP_PASS=roboshop123
 ExecStart=/app/dispatch
 SyslogIdentifier=dispatch
+
+[Install]
+WantedBy=multi-user.target
 ```
 
-**Why this config is so minimal compared to every other service:** Dispatch has no API and isn't called by anything — it's a pure background worker that only listens to RabbitMQ. No `CART_HOST`, no `USER_HOST`, no port to expose.
+Hint! You can create file by using **`vim /etc/systemd/system/dispatch.service`**
 
-```shell
+Load the service.
+
+```shell 
 systemctl daemon-reload
-systemctl enable dispatch
+```
+
+This above command is because we added a new service, We are telling systemd to reload so it will detect new service.
+
+Start the service.
+
+```shell 
+systemctl enable dispatch 
 systemctl start dispatch
 ```
