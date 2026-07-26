@@ -29,8 +29,6 @@ Configure the application.
 
 Our application developed by the developer of our org and it is not having any RPM software just like other softwares. So we need to configure every step manually
 
-We already discussed in Linux basics section that applications should run as nonroot user.
-
 Add application User
 
 ```shell 
