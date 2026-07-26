@@ -1,31 +1,70 @@
-# 02 — MongoDB
+# MongoDB
 
-MongoDB is a NoSQL document database used by **Catalogue** (products) and **User** (accounts). Chosen because both services store data with variable, nested fields — a rigid SQL schema would force constant migrations or lots of empty columns.
+MongoDB is a popular NoSQL database designed for handling large volumes of unstructured or semi-structured data. Instead of using tables like in traditional SQL databases, MongoDB stores data in flexible, JSON-like documents.
 
-## Add the repo and install
+## 🗃️ SQL vs NoSQL (MongoDB) Comparison
 
-```shell
-sudo tee /etc/yum.repos.d/mongo.repo > /dev/null << 'EOF'
+| Feature                     | SQL (Relational DB)                           | NoSQL (MongoDB - Document DB)                      |
+|----------------------------|-----------------------------------------------|----------------------------------------------------|
+| **Data Structure**         | Tables with rows and columns                  | Collections with JSON-like documents (BSON)        |
+| **Schema**                 | Rigid schema (must define columns)            | Dynamic schema (schema-less, flexible)             |
+| **Query Language**         | SQL (Structured Query Language)               | MQL (MongoDB Query Language - JavaScript style)    |
+| **Best Use Cases**         | Banking, ERP, CRM, complex relational systems | Real-time analytics, IoT, content management, apps |
+| **Examples**               | MySQL, PostgreSQL, Oracle, SQL Server         | MongoDB, CouchDB, Amazon DocumentDB                |
+
+**Example Document:**
+
+```json
+{
+  "_id": "6638fa12345abc",
+  "name": "Alice",
+  "age": 30,
+  "skills": ["Java", "DevOps"],
+  "address": {
+    "city": "Hyderabad",
+    "zip": "500001"
+  }
+}
+```
+
+Developer has chosen the database MongoDB. Hence, we are trying to install it up and configure it. 
+
+**Versions of the DB Software you will get context from the developer, Meaning we need to check with developer.**
+**Developer has shared the version information as MongoDB-7.x**
+
+Setup the MongoDB repo file 
+
+``` shell title=/etc/yum.repos.d/mongo.repo
 [mongodb-org-7.0]
 name=MongoDB Repository
 baseurl=https://repo.mongodb.org/yum/redhat/9/mongodb-org/7.0/x86_64/
 enabled=1
 gpgcheck=0
-EOF
-
-dnf install mongodb-org -y
-systemctl enable mongod
-systemctl start mongod
 ```
 
-**Why a repo file:** RHEL 9's default repos don't carry MongoDB at all, let alone the specific `7.x` version required. `gpgcheck=0` skips signature verification — acceptable for a private lab, not for production.
+Hint! You can create file by using **`vim /etc/yum.repos.d/mongo.repo`**
 
-## Open to the network
+Install MongoDB 
 
-Edit `/etc/mongod.conf`: change `bindIp` from `127.0.0.1` to `0.0.0.0`.
+```shell 
+dnf install mongodb-org -y 
+```
 
-```shell
+Start & Enable MongoDB Service 
+
+```shell 
+systemctl enable mongod 
+systemctl start mongod 
+```
+
+Usually MongoDB opens the port only to `localhost(127.0.0.1)`, meaning this service can be accessed by the application that is hosted on this server only. However, we need to access this service to be accessed by another server, So we need to change the config accordingly.
+
+Update listen address from 127.0.0.1 to 0.0.0.0 in `/etc/mongod.conf`
+
+You can edit file by using **`vim /etc/mongod.conf`**
+
+Restart the service to make the changes effected.
+
+```shell 
 systemctl restart mongod
 ```
-
-**Why:** MongoDB defaults to accepting connections only from the same machine. Catalogue and User run on separate servers and need network access — `0.0.0.0` listens on all interfaces. Config changes require a restart to take effect.
