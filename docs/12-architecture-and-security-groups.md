@@ -25,27 +25,119 @@ Each service runs on its own EC2 instance with its own security group. Two layer
 
 Both layers must agree for a connection to succeed — a very common source of "it should work but doesn't" issues when only one layer is checked.
 
-### Legend
-🟡 SSH  🔴 Public Internet  🔵 Internal (Security Group source)
+## Security Groups
 
-Only **Frontend** accepts 🔴 public traffic (port 80). Every other service accepts only 🔵 traffic from the specific security groups of services that legitimately depend on it — enforcing that, for example, Payment can never reach MongoDB even if it tried, since only Catalogue and User are permitted.
+> **Legend:**
+> 🟡 SSH &nbsp;&nbsp; 🔴 Public Internet &nbsp;&nbsp; 🔵 Internal (Security Group)
 
-### Rules by service
+---
 
-| Service | Inbound (besides SSH) |
-|---|---|
-| frontend | 80 TCP from `0.0.0.0/0` |
-| catalogue | 8080 from `roboshop-frontend`, `roboshop-cart` |
-| user | 8080 from `roboshop-frontend`, `roboshop-payment` |
-| cart | 8080 from `roboshop-frontend`, `roboshop-shipping`, `roboshop-payment` |
-| shipping | 8080 from `roboshop-frontend` |
-| payment | 8080 from `roboshop-frontend` |
-| dispatch | none (outbound-only consumer) |
-| mongodb | 27017 from `roboshop-catalogue`, `roboshop-user` |
-| redis | 6379 from `roboshop-user`, `roboshop-cart` |
-| mysql | 3306 from `roboshop-shipping` |
-| rabbitmq | 5672 from `roboshop-payment`, `roboshop-dispatch` |
+### roboshop-frontend
 
+| # | Port | Protocol | Source | Description |
+|---|------|----------|--------|-------------|
+| 🟡 | 22 | TCP | MY-IP/32 | SSH access |
+| 🔴 | 80 | TCP | 0.0.0.0/0 | HTTP from internet |
+
+---
+
+### roboshop-catalogue
+
+| # | Port | Protocol | Source | Description |
+|---|------|----------|--------|-------------|
+| 🟡 | 22 | TCP | MY-IP/32 | SSH access |
+| 🔵 | 8080 | TCP | roboshop-frontend | Frontend reverse proxy |
+| 🔵 | 8080 | TCP | roboshop-cart | Cart service lookup |
+
+---
+
+### roboshop-user
+
+| # | Port | Protocol | Source | Description |
+|---|------|----------|--------|-------------|
+| 🟡 | 22 | TCP | MY-IP/32 | SSH access |
+| 🔵 | 8080 | TCP | roboshop-frontend | Frontend reverse proxy |
+| 🔵 | 8080 | TCP | roboshop-payment | Payment user verification |
+
+---
+
+### roboshop-cart
+
+| # | Port | Protocol | Source | Description |
+|---|------|----------|--------|-------------|
+| 🟡 | 22 | TCP | MY-IP/32 | SSH access |
+| 🔵 | 8080 | TCP | roboshop-frontend | Frontend reverse proxy |
+| 🔵 | 8080 | TCP | roboshop-shipping | Shipping cart lookup |
+| 🔵 | 8080 | TCP | roboshop-payment | Payment cart lookup |
+
+---
+
+### roboshop-shipping
+
+| # | Port | Protocol | Source | Description |
+|---|------|----------|--------|-------------|
+| 🟡 | 22 | TCP | MY-IP/32 | SSH access |
+| 🔵 | 8080 | TCP | roboshop-frontend | Frontend reverse proxy |
+
+---
+
+### roboshop-payment
+
+| # | Port | Protocol | Source | Description |
+|---|------|----------|--------|-------------|
+| 🟡 | 22 | TCP | MY-IP/32 | SSH access |
+| 🔵 | 8080 | TCP | roboshop-frontend | Frontend reverse proxy |
+
+---
+
+### roboshop-dispatch
+
+| # | Port | Protocol | Source | Description |
+|---|------|----------|--------|-------------|
+| 🟡 | 22 | TCP | MY-IP/32 | SSH access |
+
+> Dispatch is a RabbitMQ consumer — it makes outbound connections only, no inbound ports required.
+
+---
+
+### roboshop-mongodb
+
+| # | Port | Protocol | Source | Description |
+|---|------|----------|--------|-------------|
+| 🟡 | 22 | TCP | MY-IP/32 | SSH access |
+| 🔵 | 27017 | TCP | roboshop-catalogue | Catalogue reads product data |
+| 🔵 | 27017 | TCP | roboshop-user | User reads/writes user accounts |
+
+---
+
+### roboshop-redis
+
+| # | Port | Protocol | Source | Description |
+|---|------|----------|--------|-------------|
+| 🟡 | 22 | TCP | MY-IP/32 | SSH access |
+| 🔵 | 6379 | TCP | roboshop-user | User session caching |
+| 🔵 | 6379 | TCP | roboshop-cart | Cart data caching |
+
+---
+
+### roboshop-mysql
+
+| # | Port | Protocol | Source | Description |
+|---|------|----------|--------|-------------|
+| 🟡 | 22 | TCP | MY-IP/32 | SSH access |
+| 🔵 | 3306 | TCP | roboshop-shipping | Shipping reads city/distance data |
+
+---
+
+### roboshop-rabbitmq
+
+| # | Port | Protocol | Source | Description |
+|---|------|----------|--------|-------------|
+| 🟡 | 22 | TCP | MY-IP/32 | SSH access |
+| 🔵 | 5672 | TCP | roboshop-payment | Payment publishes order messages |
+| 🔵 | 5672 | TCP | roboshop-dispatch | Dispatch consumes order messages |
+
+---
 ## Request Flow
 
 ```
