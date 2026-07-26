@@ -66,8 +66,6 @@ Data layer first (no dependencies), then application layer (depends on data laye
 
 **MongoDB → Redis → MySQL → RabbitMQ → Catalogue → User → Cart → Shipping → Payment → Dispatch → Frontend**
 
-Full step-by-step commands for every stage are in [`deployment-playbook.md`](deployment-playbook.md).
-
 ## Common Pattern Across Every Service
 
 Every module in this repo follows the same five-step shape:
