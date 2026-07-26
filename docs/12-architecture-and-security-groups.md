@@ -36,7 +36,7 @@ Both layers must agree for a connection to succeed — a very common source of "
 
 | # | Port | Protocol | Source | Description |
 |---|------|----------|--------|-------------|
-| 🟡 | 22 | TCP | MY-IP/32 | SSH access |
+| 🟡 | 22 | SSH | MY-IP/32 | SSH access |
 | 🔴 | 80 | TCP | 0.0.0.0/0 | HTTP from internet |
 
 ---
@@ -45,7 +45,7 @@ Both layers must agree for a connection to succeed — a very common source of "
 
 | # | Port | Protocol | Source | Description |
 |---|------|----------|--------|-------------|
-| 🟡 | 22 | TCP | MY-IP/32 | SSH access |
+| 🟡 | 22 | SSH | MY-IP/32 | SSH access |
 | 🔵 | 8080 | TCP | roboshop-frontend | Frontend reverse proxy |
 | 🔵 | 8080 | TCP | roboshop-cart | Cart service lookup |
 
@@ -55,7 +55,7 @@ Both layers must agree for a connection to succeed — a very common source of "
 
 | # | Port | Protocol | Source | Description |
 |---|------|----------|--------|-------------|
-| 🟡 | 22 | TCP | MY-IP/32 | SSH access |
+| 🟡 | 22 | SSH | MY-IP/32 | SSH access |
 | 🔵 | 8080 | TCP | roboshop-frontend | Frontend reverse proxy |
 | 🔵 | 8080 | TCP | roboshop-payment | Payment user verification |
 
@@ -65,7 +65,7 @@ Both layers must agree for a connection to succeed — a very common source of "
 
 | # | Port | Protocol | Source | Description |
 |---|------|----------|--------|-------------|
-| 🟡 | 22 | TCP | MY-IP/32 | SSH access |
+| 🟡 | 22 | SSH | MY-IP/32 | SSH access |
 | 🔵 | 8080 | TCP | roboshop-frontend | Frontend reverse proxy |
 | 🔵 | 8080 | TCP | roboshop-shipping | Shipping cart lookup |
 | 🔵 | 8080 | TCP | roboshop-payment | Payment cart lookup |
@@ -76,7 +76,7 @@ Both layers must agree for a connection to succeed — a very common source of "
 
 | # | Port | Protocol | Source | Description |
 |---|------|----------|--------|-------------|
-| 🟡 | 22 | TCP | MY-IP/32 | SSH access |
+| 🟡 | 22 | SSH | MY-IP/32 | SSH access |
 | 🔵 | 8080 | TCP | roboshop-frontend | Frontend reverse proxy |
 
 ---
@@ -85,7 +85,7 @@ Both layers must agree for a connection to succeed — a very common source of "
 
 | # | Port | Protocol | Source | Description |
 |---|------|----------|--------|-------------|
-| 🟡 | 22 | TCP | MY-IP/32 | SSH access |
+| 🟡 | 22 | SSH | MY-IP/32 | SSH access |
 | 🔵 | 8080 | TCP | roboshop-frontend | Frontend reverse proxy |
 
 ---
@@ -94,7 +94,7 @@ Both layers must agree for a connection to succeed — a very common source of "
 
 | # | Port | Protocol | Source | Description |
 |---|------|----------|--------|-------------|
-| 🟡 | 22 | TCP | MY-IP/32 | SSH access |
+| 🟡 | 22 | SSH | MY-IP/32 | SSH access |
 
 > Dispatch is a RabbitMQ consumer — it makes outbound connections only, no inbound ports required.
 
@@ -104,7 +104,7 @@ Both layers must agree for a connection to succeed — a very common source of "
 
 | # | Port | Protocol | Source | Description |
 |---|------|----------|--------|-------------|
-| 🟡 | 22 | TCP | MY-IP/32 | SSH access |
+| 🟡 | 22 | SSH | MY-IP/32 | SSH access |
 | 🔵 | 27017 | TCP | roboshop-catalogue | Catalogue reads product data |
 | 🔵 | 27017 | TCP | roboshop-user | User reads/writes user accounts |
 
@@ -114,7 +114,7 @@ Both layers must agree for a connection to succeed — a very common source of "
 
 | # | Port | Protocol | Source | Description |
 |---|------|----------|--------|-------------|
-| 🟡 | 22 | TCP | MY-IP/32 | SSH access |
+| 🟡 | 22 | SSH | MY-IP/32 | SSH access |
 | 🔵 | 6379 | TCP | roboshop-user | User session caching |
 | 🔵 | 6379 | TCP | roboshop-cart | Cart data caching |
 
@@ -124,7 +124,7 @@ Both layers must agree for a connection to succeed — a very common source of "
 
 | # | Port | Protocol | Source | Description |
 |---|------|----------|--------|-------------|
-| 🟡 | 22 | TCP | MY-IP/32 | SSH access |
+| 🟡 | 22 | SSH | MY-IP/32 | SSH access |
 | 🔵 | 3306 | TCP | roboshop-shipping | Shipping reads city/distance data |
 
 ---
@@ -133,7 +133,7 @@ Both layers must agree for a connection to succeed — a very common source of "
 
 | # | Port | Protocol | Source | Description |
 |---|------|----------|--------|-------------|
-| 🟡 | 22 | TCP | MY-IP/32 | SSH access |
+| 🟡 | 22 | SSH | MY-IP/32 | SSH access |
 | 🔵 | 5672 | TCP | roboshop-payment | Payment publishes order messages |
 | 🔵 | 5672 | TCP | roboshop-dispatch | Dispatch consumes order messages |
 
