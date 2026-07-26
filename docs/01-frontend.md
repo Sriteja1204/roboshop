@@ -10,7 +10,9 @@ Developer has chosen Nginx as a web server and thus we will install Nginx Web Se
 
 **You can list modules by using**
 
-`dnf module list nginx`
+```shell
+dnf module list nginx
+```
 
 Install Nginx 
 ```shell
