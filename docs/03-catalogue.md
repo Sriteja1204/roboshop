@@ -88,9 +88,16 @@ SyslogIdentifier=catalogue
 WantedBy=multi-user.target
 ```
 
-Hint! You can create file by using **`vim /etc/systemd/system/catalogue.service`**
+Hint! You can create file by using **`vim /etc/systemd/system/catalogue.service`**  
 
-Ensure you replace `<MONGODB-SERVER-IPADDRESS>` with IP address
+For better usuage use the **`insted of entering the ip address manually enter the R53 record`**
+
+Once it is done use the below commands to check **`DNS resolution and Network connectivity`**
+
+```shell 
+nslookup <DNS record name>
+telnet <DNS record name> 27017
+```
 
 Load the service.
 
