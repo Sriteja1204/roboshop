@@ -32,24 +32,8 @@ frontend  :
 
 ## BLOCK 1 — MongoDB
 
-```shell
-sudo tee /etc/yum.repos.d/mongo.repo > /dev/null << 'EOF'
-[mongodb-org-7.0]
-name=MongoDB Repository
-baseurl=https://repo.mongodb.org/yum/redhat/9/mongodb-org/7.0/x86_64/
-enabled=1
-gpgcheck=0
-EOF
-
-sudo dnf install mongodb-org -y
-sudo systemctl enable mongod
-sudo systemctl start mongod
 ```
-
-Edit `/etc/mongod.conf` → change `bindIp: 127.0.0.1` to `bindIp: 0.0.0.0`
-
-```shell
-sudo systemctl restart mongod
+docs/02-mongodb.md
 ```
 
 **Verify:** `systemctl status mongod` shows `active (running)`.
