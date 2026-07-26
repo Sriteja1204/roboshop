@@ -9,22 +9,8 @@ RoboShop is a demo e-commerce platform split into **11 independently deployed se
 ## Architecture
 
 ```
-                          AWS Account
- ┌──────────┐      ┌─────────────────────┐      ┌─────────────────┐
- │          │      │   Application Tier  │      │   Data Tier     │
- │  Client  │─────▶│  frontend (nginx)   │      │                 │
- │ (browser)│      │        │            │      │                 │
- └──────────┘      │        ▼            │      │                 │
-                    │   catalogue ───────┼─────▶│  MongoDB :27017 │
-                    │   user     ───────┼─────▶│  MongoDB :27017 │
-                    │   user     ───────┼─────▶│  Redis   :6379  │
-                    │   cart     ───────┼─────▶│  Redis   :6379  │
-                    │   cart ◀── shipping│      │                 │
-                    │   cart ◀── payment │      │                 │
-                    │   shipping ───────┼─────▶│  MySQL   :3306  │
-                    │   payment  ───────┼─────▶│  RabbitMQ :5672 │
-                    │   dispatch ◀──────┼──────│  RabbitMQ :5672 │
-                    └─────────────────────┘      └─────────────────┘
+<img width="851" height="521" alt="image" src="https://github.com/user-attachments/assets/e35444c3-d6a0-4a03-a240-8e624504ce21" />
+
 ```
 
 See [`docs/12-architecture-and-security-groups.md`](docs/12-architecture-and-security-groups.md) for the full request-flow diagram and per-service security group rules.
