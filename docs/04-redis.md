@@ -1,26 +1,34 @@
-# 04 — Redis
 
-In-memory cache used by **User** (sessions) and **Cart** (cart contents). Chosen over MongoDB for these specifically because the data is short-lived and needs to be as fast as possible — losing it on restart is acceptable, unlike account or order data.
+# Redis
 
-## Install (specific version)
+Redis (REmote DIctionary Server) is an open-source, in-memory data store used as a database, cache. It is known for ultra-fast performance due to its in-memory(stores in RAM) architecture. Uses a simple key-value model but supports complex data types.
 
-```shell
+**Versions of the DB Software you will get context from the developer, Meaning we need to check with developer.**
+
+Install redis, By default redis 6 is available, We would like to enable 7 version and install list.
+
+```shell 
 dnf module disable redis -y
 dnf module enable redis:7 -y
-dnf install redis -y
 ```
 
-## Open to the network
-
-Edit `/etc/redis/redis.conf`:
-- `bind 127.0.0.1` → `0.0.0.0`
-- `protected-mode yes` → `no`
-
-**Why both changes are needed:** `bind` controls which network interfaces Redis listens on. `protected-mode` is a second safety lock — even with `bind` opened, Redis refuses outside connections unless a password is set or protected mode is explicitly disabled.
-
-> Note: this combination (open bind, no protected mode, no password) is fine for a private training VPC, but in production you'd set `requirepass` and restrict access via security groups instead.
+Install Redis 
 
 ```shell
-systemctl enable redis
-systemctl start redis
+dnf install redis -y 
+```
+
+Usually Redis opens the port only to `localhost(127.0.0.1)`, meaning this service can be accessed by the application that is hosted on this server only. However, we need to access this service to be accessed by another server, So we need to change the config accordingly.
+
+Update listen address from `127.0.0.1` to `0.0.0.0` in   `/etc/redis/redis.conf`
+
+Update `protected-mode` from `yes` to `no` in   `/etc/redis/redis.conf`
+
+You can edit file by using **`vim /etc/redis/redis.conf`**
+
+Start & Enable Redis Service 
+
+```shell 
+systemctl enable redis 
+systemctl start redis 
 ```
