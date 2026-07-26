@@ -1,21 +1,25 @@
-# 07 — MySQL
+# MySQL 
 
-Relational database used by **Shipping**. Chosen because shipping cost calculation depends on structured, always-consistent relational data (cities, distances, pricing rules) — a classic SQL-join problem, unlike Catalogue/User's flexible document data.
+Developer has chosen the database MySQL. Hence, we are trying to install it up and configure it.
 
-## Install
+**Versions of the DB Software you will get context from the developer, Meaning we need to check with developer.**
+**Developer has shared the version information as MySQL-8.x**
 
-```shell
+Install MySQL Server 
+
+```shell 
 dnf install mysql-server -y
-systemctl enable mysqld
-systemctl start mysqld
 ```
 
-**Why no repo file needed:** unlike MongoDB/Redis/RabbitMQ, RHEL 9's default repos already carry MySQL at the required `8.x` version — no extra repo or module-stream switch required.
+Start MySQL Service 
 
-## Set the root password
+```shell 
+systemctl enable mysqld
+systemctl start mysqld  
+```
+
+Next, We need to change the default root password in order to start using the database service. Use password **`RoboShop@1`** or any other as per your choice. 
 
 ```shell
-mysql_secure_installation --set-root-pass 'RoboShop@1'
+mysql_secure_installation --set-root-pass RoboShop@1
 ```
-
-**Why this step exists:** unlike MongoDB (installed wide open by default), MySQL ships secure by default — you're locked out until you explicitly set a root password.
