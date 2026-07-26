@@ -56,7 +56,9 @@ Create Nginx Reverse Proxy Configuration to reach backend services.
 vim /etc/nginx/nginx.conf
 ```
 
-Add the following content 
+Now delete the existing content **Press esc then :%d**. It will remove the existing content in the file 
+
+Then add the following content 
 
 ```nginx configuration title=/etc/nginx/nginx.conf 
 user nginx;
